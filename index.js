@@ -14,6 +14,9 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json'); '';
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -30,6 +33,9 @@ app.use(
         exposedHeaders: ['x-auth-header'],
     }),
 );
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+// app.use('/api/v1', SwaggerAPIRouter);
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

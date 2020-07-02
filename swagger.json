@@ -1,0 +1,179 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "JWT-REST-API-CRUD-NODE-JS",
+        "description": "JWT Token based Rest API with CRUD Operations on Mongo with NodeJs"
+    },
+    "host": "https://jwt-rest-api-crud-nodejs.herokuapp.com",
+    "basePath": "/",
+    "tags": [{
+            "name": "Agency",
+            "description": "API for Creating Agency in the Database with required Fields with JWT token"
+        },
+        {
+            "name": "Client",
+            "description": "API for Creating Client in the Database with required Fields mapped with Agency Id and JWT token passed in the Header"
+        }
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "name": "Authorization",
+            "description": "API Token",
+            "type": "apiKey",
+            "in": "header"
+        }
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/agency": {
+            "post": {
+                "tags": [
+                    "Agency"
+                ],
+                "summary": "Create new Agency in Database",
+                "description": "Create new Agency in Database with required fields",
+                "parameters": [{
+                    "name": "agency",
+                    "in": "body",
+                    "description": "Agency that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Agency"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Agency is created",
+                        "schema": {
+                            "$ref": "#/definitions/Agency"
+                        }
+                    }
+                }
+            }
+        },
+        "/client": {
+            "put": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Updtae  Client in Database",
+                "description": "Update Client in Database",
+                "parameters": [{
+                    "name": "Client",
+                    "in": "body",
+                    "description": "Client that we want to update",
+                    "schema": {
+                        "$ref": "#/definitions/Client"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Client is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Client"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/getAllAgencies": {
+            "get": {
+                "tags": [
+                    "Agency"
+                ],
+                "security": [{
+                    "Bearer": []
+                }],
+                "summary": "Get Agencies",
+                "responses": {
+                    "200": {
+                        "description": "List of Agencies",
+                        "schema": {
+                            "$ref": "#/definitions/Agency"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Agency": {
+            "required": [
+                "name",
+                "email",
+                "address1",
+                "address2",
+                "state",
+                "city",
+                "phone"
+            ],
+            "properties": {
+
+                "email": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "name": {
+                    "type": "string"
+                },
+                "address1": {
+                    "type": "string"
+                },
+                "address2": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "number"
+                }
+            }
+        },
+    
+        "Client": {
+            "required": [
+                "name",
+                "email",
+                "phone",
+                "totalBill"
+            ],
+            "properties": {
+
+                "email": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "name": {
+                    "type": "string"
+                },
+
+                "phone": {
+                    "type": "number"
+                },
+                "Total Bill": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}
