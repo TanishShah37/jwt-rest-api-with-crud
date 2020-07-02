@@ -1,0 +1,33 @@
+{
+  "name": "jwt_rest_api_crud",
+  "version": "1.0.0",
+  "description": "JWT based REST API with CRUD Operations",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "async-busboy": "^1.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "compression": "^1.7.4",
+    "config": "^3.2.6",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "http": "0.0.0",
+    "jio": "^3.39.0",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.9",
+    "morgan": "^1.10.0",
+    "mv": "^2.1.1",
+    "nodemon": "^2.0.3",
+    "util": "^0.12.3"
+  }
+}
