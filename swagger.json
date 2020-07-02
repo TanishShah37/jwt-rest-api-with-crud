@@ -92,7 +92,7 @@
             }
         },
 
-        "/getAllAgencies": {
+        "/agency/getAllAgencies": {
             "get": {
                 "tags": [
                     "Agency"
