@@ -40,12 +40,12 @@
                 "tags": [
                     "Agency"
                 ],
-                "summary": "Create new Agency in Database",
-                "description": "Create new Agency in Database with required fields",
+                "summary": "Create new Agency with Client or adds Client to existing Agency in Database ",
+                "description": "Create new Agency with Client or adds Client to existing Agency in Database with required fields",
                 "parameters": [{
                     "name": "agency",
                     "in": "body",
-                    "description": "Agency that we want to create",
+                    "description": "Agency with Client that we want to create or add Client to existing Agency",
                     "schema": {
                         "$ref": "#/definitions/Agency"
                     }
@@ -55,7 +55,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "New Agency is created",
+                        "description": "New Agency with Client is created or added Client to existing Agency",
                         "schema": {
                             "$ref": "#/definitions/Agency"
                         }
@@ -68,7 +68,7 @@
                 "tags": [
                     "Client"
                 ],
-                "summary": "Updtae  Client in Database",
+                "summary": "Update  Client in Database",
                 "description": "Update Client in Database",
                 "parameters": [{
                     "name": "Client",
@@ -147,9 +147,27 @@
                 "phone": {
                     "type": "number"
                 }
+            },
+            "example": {
+                "agencyDetails": {
+                    "name": "Agency10",
+                    "email": "Agency10@gmail.com",
+                    "address1": "address4",
+                    "address2": "address4",
+                    "state": "Maharashtra4",
+                    "city": "Mumbai4",
+                    "phone": "898424332"
+                },
+                "clientDetails": {
+                    "name": "Client11",
+                    "email": "client11@gmail.com",
+                    "phone": "898424332",
+                    "totalBill": "649594"
+                }
             }
         },
-    
+
+
         "Client": {
             "required": [
                 "name",
@@ -173,7 +191,17 @@
                 "Total Bill": {
                     "type": "number"
                 }
+            },
+
+            "example": {
+                "clientDetails": {
+                    "name": "Client11",
+                    "email": "client11@gmail.com",
+                    "phone": "898424332",
+                    "totalBill": "649594"
+                }
             }
         }
+
     }
 }
