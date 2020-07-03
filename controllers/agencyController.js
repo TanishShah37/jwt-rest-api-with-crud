@@ -5,10 +5,11 @@ const util = require('util')
 const colors = require('colors')
 const jwt = require("jsonwebtoken");
 const agencyModel = require("../models/agencyModel");
-
+const clientModel = require("../models/clientModel");
+const auth = require('../middleware/auth')
 
 router.post("/", (req, res) => {
-  const {
+  let {
     name,
     email,
     address1,
@@ -16,62 +17,101 @@ router.post("/", (req, res) => {
     state,
     city,
     phone
-  } = req.body;
+  } = req.body.agencyDetails;
 
-  if (!name || !email || !address1 || !state || !city || !phone) {
-    const message = `Below Fields Are Required: 'name email address1 state city phone'`;
-    return res.status(400).json({
-      message
+  let clientEmail = req.body.clientDetails.email;
+
+  function createClientWithAgency(agency) {
+    let agencyId = agency.id;
+    let {
+      name,
+      email,
+      phone,
+      totalBill
+    } = req.body.clientDetails;
+
+    if (isNaN(totalBill)) {
+      return res.status(400).json({
+        message: `${totalBill} is not a valid number`
+      });
+    }
+
+    let actions = {};
+    if (totalBill >= 0) {
+      actions.type = 'add'
+    } else {
+      actions.type = 'subtract'
+    }
+    actions.amount = totalBill
+
+    const newClient = new clientModel({
+      agencyId,
+      name,
+      email,
+      phone,
+      totalBill,
+      actions: [actions]
     });
+    newClient
+      .save()
+      .then(client => {
+        res.json({
+          agency,
+          client,
+        });
+      })
+
   }
 
-  agencyModel.findOne({
-      email
+  clientModel.findOne({
+      email: clientEmail
     })
-    .then(agency => {
-
-
-      if (agency) return res.status(400).json({
-        message: "agency Already Exists"
-
+    .then(client => {
+      if (client) return res.status(400).json({
+        message: "client Already Exists"
       });
-
-      const newAgency = new agencyModel({
-        name,
-        email,
-        address1,
-        address2,
-        state,
-        city,
-        phone
-      });
-      newAgency
-        .save()
-        .then(agency => {
-          jwt.sign({
-              id: agency.id
-            },
-            config.jwtSecret, {
-              expiresIn: 1036800
-            },
-            (error, token) => {
-              if (error) throw error;
-              res.json({
-                token,
-                agency: {
-                  id: agency.id,
-                  name: agency.name,
-                  email: agency.email
-                }
-              });
-            }
-          );
+      agencyModel.findOne({
+          email
         })
-    })
-    .catch(error => {
-      util.log(colors.red(error))
-    })
+        .then(agency => {
+          if (agency) {
+            createClientWithAgency(agency)
+          };
+
+          const newAgency = new agencyModel({
+            name,
+            email,
+            address1,
+            address2,
+            state,
+            city,
+            phone
+          });
+          newAgency
+            .save()
+            .then(agency => {
+              jwt.sign({
+                  id: agency.id
+                },
+                config.jwtSecret, {
+                  expiresIn: 1036800
+                },
+                (error, token) => {
+                  if (error) throw error;
+
+                  createClientWithAgency(agency)
+                }
+              );
+            })
+        })
+        .catch(error => {
+          util.log(colors.red(error))
+        })
+    });
+
 });
+
+
 
 
 router.get('/getAllAgencies', (req, res) => {

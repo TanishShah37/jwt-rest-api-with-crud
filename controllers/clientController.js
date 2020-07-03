@@ -3,63 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth')
 const clientModel = require("../models/clientModel");
 
-router.post("/", auth, (req, res) => {
-    const {
-        name,
-        email,
-        phone,
-        totalBill
-    } = req.body;
 
-    let agencyId = req.agency.id;
-
-    if (!name || !email || !phone) {
-        const message = "Below Fields Are Required: name email phone";
-        return res.status(400).json({
-            message
-        });
-    }
-
-    if (isNaN(totalBill)) {
-        return res.status(400).json({
-            message: `${totalBill} is not a valid number`
-        });
-    }
-
-    let actions = {};
-    if (totalBill >= 0) {
-        actions.type = 'add'
-    } else {
-        actions.type = 'subtract'
-    }
-    actions.amount = totalBill
-
-    clientModel.findOne({
-            email
-        })
-        .then(client => {
-            if (client) return res.status(400).json({
-                message: "client Already Exists"
-            });
-
-            const newClient = new clientModel({
-                agencyId,
-                name,
-                email,
-                phone,
-                totalBill,
-                actions: [actions]
-            });
-            newClient
-                .save()
-                .then(client => {
-                    res.json({
-                        client
-                    });
-                })
-                .catch(err => res.status(400));
-        });
-})
 
 router.put("/", auth, (req, res) => {
     const {
